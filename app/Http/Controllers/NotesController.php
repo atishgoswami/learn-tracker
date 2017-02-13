@@ -45,9 +45,16 @@ class NotesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update()
+    public function update($noteId)
     {
+        $this->validator(request()->all())->validate();
+        $note = Note::fetchNotesOfUser(Auth::id())->where('id', $noteId)->firstOrFail();
 
+        $note->title    = request('title');
+        $note->body     = request('body');
+        $note->save();
+
+        return redirect('notes')->with('flash_success', "Note updated successfully");
     }
 
     /**
@@ -65,7 +72,7 @@ class NotesController extends Controller
         $note->user_id  = Auth::id();
         $note->save();
 
-        return redirect('notes');
+        return redirect('notes')->with('flash_success', "Note created successfully");
     }
 
     /**
@@ -73,9 +80,11 @@ class NotesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function delete()
+    public function delete($noteId)
     {
-
+        $note = Note::fetchNotesOfUser(Auth::id())->where('id', $noteId)->firstOrFail();
+        $note->delete();
+        return redirect('notes')->with('flash_success', "Note deleted successfully");
     }
 
     /**

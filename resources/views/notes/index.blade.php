@@ -24,7 +24,11 @@
                 <div class="panel-footer clearfix">
                     <div class="pull-right">
                         <a href="{{ route('note.edit', ['note_id' => $note->id]) }}" class="btn btn-primary">Edit</a>
-                        <a href="{{ route('note.delete', ['note_id' => $note->id]) }}" class="btn btn-danger">Delete</a>
+                        <a href="#" class="btn btn-danger" onclick="event.preventDefault();document.getElementById('delete-form').submit();">Delete</a>
+                        <form id="delete-form" action="{{ route('note.delete', ['note_id' => $note->id]) }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                            {{ method_field('DELETE') }}
+                        </form>
                     </div>
                 </div>
             </div>
